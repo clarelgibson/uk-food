@@ -10,7 +10,7 @@ Following on from the [farnham-food](https://github.com/clarelgibson/farnham-foo
 
 ### Data
 
--   [UK food hygiene ratings by local authority](https://ratings.food.gov.uk/open-data/en-GB) published by the [FSA]((https://www.food.gov.uk)). Data is refreshed daily.
+-   [UK food hygiene ratings by local authority](https://ratings.food.gov.uk/open-data/en-GB) published by the [FSA](https://www.food.gov.uk). Data is refreshed daily.
 
 ### Packages
 
