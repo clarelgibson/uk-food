@@ -124,9 +124,15 @@ fhr <- fhr_src %>%
   rename(hygiene_score = hygiene,
          structural_score = structural,
          management_score = confidence_in_management) %>% 
-  # join LAD data
-  left_join(lad,
-            by = "local_authority_code") %>% 
+  # join local authority data
+  left_join(
+    select(
+      fhrlad_cln,
+      local_authority_code = local_authority_id_code,
+      lad23nm,
+      region_name
+    )
+  ) %>% 
   # select and rename columns to keep
   select(
     fhrsid,
@@ -143,10 +149,8 @@ fhr <- fhr_src %>%
     local_authority_code,
     local_authority_name,
     local_authority_web_site,
-    local_authority_longitude = long,
-    local_authority_latitude = lat,
-    region_name,
-    geometry
+    lad23nm,
+    region_name
   ) %>% 
   # correct data types
   type_convert()
