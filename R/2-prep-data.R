@@ -96,6 +96,8 @@ fhr <- fhr_src %>%
   mutate(rating_value = as.numeric(rating_value)) %>% 
   # Remove records with missing rating values
   filter(!is.na(rating_value)) %>% 
+  # add count column
+  mutate(business_count = 1) %>% 
   # recode rating key
   mutate(
     rating_key = case_when(
@@ -139,6 +141,7 @@ fhr <- fhr_src %>%
     business_id = local_authority_business_id,
     business_name,
     business_type,
+    business_count,
     business_longitude = longitude,
     business_latitude = latitude,
     rating_value,
@@ -156,24 +159,61 @@ fhr <- fhr_src %>%
   type_convert()
 
 # > FHR Waffle =================================================================
-fhr_waffle <- fhr %>% 
-  # select dimensions to measure on
-  select(local_authority_name,
-         business_type,
-         rating_indicator_binary) %>% 
+# >> Scaffold ------------------------------------------------------------------
+scaffold_types <- fhr %>% 
+  select(business_type) %>% 
+  distinct() %>% 
+  arrange(business_type)
+
+scaffold_lads <- fhr %>% 
+  select(local_authority_name) %>% 
+  distinct() %>% 
+  arrange(local_authority_name)
+
+scaffold_rating <- fhr %>% 
+  select(rating_indicator_binary) %>% 
+  distinct() %>% 
+  arrange(rating_indicator_binary)
+
+scaffold <- 
+  scaffold_lads %>% 
+  cross_join(scaffold_types) %>% 
+  cross_join(scaffold_rating) %>% 
+  mutate(scaffold_count = 0)
+
+# >> Waffle --------------------------------------------------------------------
+fhr_waffle <- scaffold %>% 
+  left_join(
+    select(
+      fhr,
+      local_authority_name,
+      business_type,
+      rating_indicator_binary,
+      business_count
+    )
+  ) %>% 
   arrange(local_authority_name,
           business_type,
           rating_indicator_binary) %>% 
+  # fix business count
+  mutate(
+    business_count = if_else(
+      is.na(business_count),
+      scaffold_count,
+      business_count
+    )
+  ) %>% 
+  select(-scaffold_count) %>% 
   # add count by business type
   group_by(local_authority_name,
            business_type) %>% 
-  mutate(count_business_type = n()) %>% 
+  mutate(count_business_type = sum(business_count)) %>% 
   ungroup() %>% 
   # add count of rating by business type and local authority
   group_by(local_authority_name,
            business_type,
            rating_indicator_binary) %>% 
-  mutate(count_rating = n(),
+  mutate(count_rating = sum(business_count),
          pct_rating = count_rating / count_business_type) %>% 
   ungroup() %>% 
   distinct() %>% 
@@ -184,4 +224,3 @@ fhr_waffle <- fhr %>%
          total_businesses = count_business_type,
          count_satisfactory = count_rating,
          pct_satisfactory = pct_rating)
-

@@ -160,6 +160,17 @@
       ],
       "Hash": "e8a1e41acf02548751f45c718d55aa6a"
     },
+    "data.table": {
+      "Package": "data.table",
+      "Version": "1.14.8",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "b4c06e554f33344e044ccd7fdca750a9"
+    },
     "dplyr": {
       "Package": "dplyr",
       "Version": "1.1.2",

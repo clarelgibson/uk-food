@@ -13,7 +13,7 @@ library(sf)
 
 # UK LOCAL AUTHORITY DISTRICTS #################################################
 # > FHR LADs ===================================================================
-fhrlad_url <- "https://ratings.food.gov.uk/authorities/xml"
+fhrlad_url <- "https://api1-ratings.food.gov.uk/authorities/xml"
 fhrlad_xml <- as_list(read_xml(fhrlad_url))
 
 # Convert to df
