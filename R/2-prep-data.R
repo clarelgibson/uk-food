@@ -166,9 +166,9 @@ scaffold_types <- fhr %>%
   arrange(business_type)
 
 scaffold_lads <- fhr %>% 
-  select(local_authority_name) %>% 
+  select(lad23nm) %>% 
   distinct() %>% 
-  arrange(local_authority_name)
+  arrange(lad23nm)
 
 scaffold_rating <- fhr %>% 
   select(rating_indicator_binary) %>% 
@@ -186,13 +186,13 @@ fhr_waffle <- scaffold %>%
   left_join(
     select(
       fhr,
-      local_authority_name,
+      lad23nm,
       business_type,
       rating_indicator_binary,
       business_count
     )
   ) %>% 
-  arrange(local_authority_name,
+  arrange(lad23nm,
           business_type,
           rating_indicator_binary) %>% 
   # fix business count
@@ -205,12 +205,12 @@ fhr_waffle <- scaffold %>%
   ) %>% 
   select(-scaffold_count) %>% 
   # add count by business type
-  group_by(local_authority_name,
+  group_by(lad23nm,
            business_type) %>% 
   mutate(count_business_type = sum(business_count)) %>% 
   ungroup() %>% 
   # add count of rating by business type and local authority
-  group_by(local_authority_name,
+  group_by(lad23nm,
            business_type,
            rating_indicator_binary) %>% 
   mutate(count_rating = sum(business_count),
@@ -219,7 +219,7 @@ fhr_waffle <- scaffold %>%
   distinct() %>% 
   # keep only the satisfactory rows
   filter(rating_indicator_binary == "Satisfactory") %>% 
-  select(local_authority_name,
+  select(local_authority_name = lad23nm,
          business_type,
          total_businesses = count_business_type,
          count_satisfactory = count_rating,
