@@ -10,7 +10,8 @@ Following on from the [farnham-food](https://github.com/clarelgibson/farnham-foo
 
 ### Data
 
--   [UK food hygiene ratings by local authority](https://ratings.food.gov.uk/open-data/en-GB) published by the [FSA](https://www.food.gov.uk). Data is refreshed daily.
+- [UK food hygiene ratings by local authority](https://ratings.food.gov.uk/open-data/en-GB) published by the [FSA](https://www.food.gov.uk). Data is refreshed daily.
+- [Local Authority Districts (May 2023) Boundaries UK BFC](https://geoportal.statistics.gov.uk/datasets/2f0b8074b6ab4af6a1ec30eb66317d12_0/explore?location=54.959083%2C-3.316939%2C5.91). Download the Shapefile at this URL and store in `/data/src/shape-lad/`.
 
 ### Packages
 
